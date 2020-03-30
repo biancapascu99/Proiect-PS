@@ -1,1 +1,1 @@
-# Proiect-probabilitati-si-statistica
+# Proiect-PS
