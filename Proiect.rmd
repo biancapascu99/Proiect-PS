@@ -1,0 +1,1526 @@
+---
+title: "Tema probabilitati si statistica"
+author:
+- name: Bianca Pascu
+- name: Luiza Patroescu
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+  word_document: default
+  pdf_document: default
+  html_document:
+    highlight: pygments
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(include = TRUE, echo = TRUE, message=FALSE)
+options(warn = -1)
+```
+## **1. Problema 1** 
+
+### 1) Generarea celor 1000 de realizari independente din fiecare repartitie si calculul mediei si variantei pt fiecare esantion.
+
+#### Functiile mean() si var se folosesc pentru aflarea mediei, respectiv variantei.
+
+# Normala
+```{r}
+N = rnorm(1000,500)
+mean(N)
+var(N)
+```
+# Poisson
+```{r}
+P = rpois(1000,500)
+mean(P)
+var(P)
+```
+# Exponentiala
+```{r}
+E = rexp(1000,10)
+mean(E)
+var(E)
+```
+# Bionomiala
+```{r}
+B = rbinom(1000, 10, 0.1)
+mean(B)
+var(B)
+```
+
+### 2), 3) Ilustrarea grafica a functiilor de masa/densitate ulitizand si a functiilor de repartitie pentru cele 5 seturi de parametrii diferiti
+
+#### Functiile dbinom, dpois, dexp, dnorm genereaza densitatea/masa fiecarei repartitii.
+#### Functiile pbinom, ppois, pexp, pnorm genereaza repartitiile corespunzatoare.
+```{r}
+# graficele normal
+n1 = data.frame(fct_densitate=dnorm(0:30, 10, 2), fct_masa=pnorm(0:30, 10, 2))
+n2 = data.frame(fct_densitate=dnorm(0:30, 0, 5), fct_masa=pnorm(0:30, 0, 5))
+n3 = data.frame(fct_densitate=dnorm(0:30, 2, 11), fct_masa=pnorm(0:30, 2, 11))
+n4 = data.frame(fct_densitate=dnorm(0:30, 10, 1), fct_masa=pnorm(0:30, 10, 1))
+n5 = data.frame(fct_densitate=dnorm(0:30, 2, 15), fct_masa=pnorm(0:30, 2, 15))
+
+plot(n1$fct_densitate, type="l",col="magenta", main="Normal fct_densitate")
+lines(n2$fct_densitate,type="l",col="green")
+lines(n3$fct_densitate,type="l",col="blue")
+lines(n4$fct_densitate,type="l",col="darkmagenta")
+lines(n5$fct_densitate,type="l",col="brown")
+legend("topright",c("m=10, sd=2","m=0, sd=5","m=2, sd=11","m=10,sd=1", "m=2,sd=15"), col=c("magenta","green","blue","darkmagenta","brown"),pch=15)
+grid()
+
+```
+```{r}
+plot(n1$fct_masa,type="l",col="magenta", main="Normal fct_masa") 
+lines(n2$fct_masa,type="l",col="green")
+lines(n3$fct_masa,type="l",col="blue")
+lines(n4$fct_masa,type="l",col="darkmagenta")
+lines(n5$fct_masa,type="l",col="brown")
+legend("bottomright",c("m=0, sd=1","m=0, sd=5","m=2, sd=11","m=10,sd=1", "m=2,sd=15"), col=c("magenta","green","blue","darkmagenta","brown"),pch=15)
+grid()
+
+```
+
+
+```{r}
+# graficele poisson
+p1 = data.frame(fct_densitate=dpois(0:30, 0.1), fct_masa=ppois(0:30, 0.1))
+p2 = data.frame(fct_densitate=dpois(0:30, 2), fct_masa=ppois(0:30, 2))
+p3 = data.frame(fct_densitate=dpois(0:30, 5), fct_masa=ppois(0:30, 5))
+p4 = data.frame(fct_densitate=dpois(0:30, 350), fct_masa=ppois(0:30, 350))
+p5 = data.frame(fct_densitate=dpois(0:30, 0.02), fct_masa=ppois(0:30, 0.02))
+
+plot(p1$fct_densitate, type="l",col="magenta", main="Poisson fct_densitate") 
+lines(p2$fct_densitate,type="l",col="green")
+lines(p3$fct_densitate,type="l",col="blue")
+lines(p4$fct_densitate,type="l",col="darkmagenta")
+lines(p5$fct_densitate,type="l",col="brown")
+legend("topright",c("l=0.1","l=2","l=5","l=350", "l=0.02"), col=c("magenta","green","blue","darkmagenta","brown"),pch=15)
+grid()
+
+```
+```{r}
+plot(p1$fct_masa,type="l",col="magenta", main="Poisson fct_masa") 
+lines(p2$fct_masa,type="l",col="green")
+lines(p3$fct_masa,type="l",col="blue")
+lines(p4$fct_masa,type="l",col="darkmagenta")
+lines(p5$fct_masa,type="l",col="brown")
+legend("bottomright",c("l=0.1","l=2","l=5","l=350", "l=0.02"), col=c("magenta","green","blue","darkmagenta","brown"),pch=15)
+```
+
+```{r}
+# graficele exponential
+e1 = data.frame(fct_densitate=dexp(0:30, 0.25), fct_masa=pexp(0:30, 0.25))
+e2 = data.frame(fct_densitate=dexp(0:30, 0.75), fct_masa=pexp(0:30, 0.75))
+e3 = data.frame(fct_densitate=dexp(0:30, 1), fct_masa=pexp(0:30, 1))
+e4 = data.frame(fct_densitate=dexp(0:30, 5), fct_masa=pexp(0:30, 5))
+e5 = data.frame(fct_densitate=dexp(0:30, 30), fct_masa=pexp(0:30, 30))
+
+plot(e1$fct_densitate, type="l",col="magenta", main="Exponential fct_densitate")
+lines(e2$fct_densitate,type="l",col="green")
+lines(e3$fct_densitate,type="l",col="blue")
+lines(e4$fct_densitate,type="l",col="darkmagenta")
+lines(e5$fct_densitate,type="l",col="brown")
+legend("topright",c("r=0.25","r=0.75","r=1","r=5", "r=30"), col=c("magenta","green","blue","darkmagenta","brown"),pch=15)
+grid()
+
+```
+```{r}
+plot(e1$fct_masa,type="l" ,col="magenta", main="Exponential fct_masa") 
+lines(e2$fct_masa,type="l",col="green")
+lines(e3$fct_masa,type="l",col="blue")
+lines(e4$fct_masa,type="l",col="darkmagenta")
+lines(e5$fct_masa,type="l",col="brown")
+legend("bottomright",c("r=0.25","r=0.75","r=1","r=5", "r=30"), col=c("magenta","green","blue","darkmagenta","brown"),pch=15)
+grid()
+
+```
+
+```{r}
+# graficele binomial
+b1 = data.frame(fct_densitate=dbinom(0:30, 30, 0.05), fct_masa=pbinom(0:30, 30, 0.05))
+b2 = data.frame(fct_densitate=dbinom(0:30, 30, 0.1), fct_masa=pbinom(0:30, 30, 0.1))
+b3 = data.frame(fct_densitate=dbinom(0:30, 30, 0.25), fct_masa=pbinom(0:30, 30, 0.25))
+b4 = data.frame(fct_densitate=dbinom(0:30, 30, 0.5), fct_masa=pbinom(0:30, 30, 0.5))
+b5 = data.frame(fct_densitate=dbinom(0:30, 30, 0.75), fct_masa=pbinom(0:30, 30, 0.75))
+
+plot(b1$fct_densitate, type="l",col="magenta", main="Binomial fct_densitate")
+lines(b2$fct_densitate,type="l",col="green")
+lines(b3$fct_densitate,type="l",col="blue")
+lines(b4$fct_densitate,type="l",col="darkmagenta")
+lines(b5$fct_densitate,type="l",col="brown")
+legend("topright",c("p=0.05","p=0.1","p=0.25","p=0.5", "p=0.75"), col=c("magenta","green","blue","darkmagenta","brown"),pch=15)
+grid()
+```
+```{r}
+plot(b1$fct_masa,type="l",col="magenta", main="Binomial fct_masa")
+lines(b2$fct_masa,type="l",col="green")
+lines(b3$fct_masa,type="l",col="blue")
+lines(b4$fct_masa,type="l",col="darkmagenta")
+lines(b5$fct_masa,type="l",col="brown")
+legend("bottomright",c("p=0.05","p=0.1","p=0.25","p=0.5", "p=0.75"), col=c("magenta","green","blue","darkmagenta","brown"),pch=15)
+grid()
+```
+
+### 4) Aproximarile functiilor de repartitie si de masa
+
+
+```{r echo=FALSE}
+matr <- matrix(numeric(10 * 6), ncol = 6,
+               dimnames = list(
+                 1:10,
+                 c(
+                   "K",
+                   "Binomiala",
+                   "Poisson",
+                   "Normala",
+                   "Normala Corectie",
+                   "Camp-Paulson"
+                  
+                 )
+               ))
+```
+
+```{r}
+
+
+AppBp <- function(n, p) {
+  x <- matrix(numeric(10 * 6), ncol = 6,
+              dimnames = list(
+                1:10,
+                c(
+                  "K",
+                  "Binomiala",
+                  "Poisson",
+                  "Normala",
+                  "Normala Corectie",
+                  "Camp-Paulson"
+                 
+                )
+              ))
+  x[,1] <- 1:10
+  for(k in 1:10){
+    lambda <- n * p
+    
+    # binomiala
+    x[, 2] <- pbinom(1:10, n, p)
+    
+    # poisson
+    x[, 3] <- ppois(1:10, lambda)
+    error <- max(abs(x[, 1] - x[, 2]))
+    
+    # normala corectie
+    q = 1 - p
+    y <-rnorm(n, n * p, sqrt(n * p * q)) # generare n v.a. normale de medie np
+    z.cc <- ((k + 0.5) - n*p / sqrt(n*p*q))  # cu coeficient de corectie
+    x[k, 5] <- pnorm(z.cc)
+     
+    # normala
+    z.ncc <- (k - n*p / sqrt(n*p*q)) # fara coeficient de corectie
+    x[k, 4] <- pnorm(z.ncc)
+   
+    # paulson
+    a <- (1 / (9 * (n - k)))
+    b <- 1 / (9 * (k + 1))
+    r <- ((k + 1) * (1 - p) / (p * (n - k)))
+    u <- 1 - a
+    C <- (1 - b) * (r ^ (2 / 3))
+    C <- C - u
+    o <- a + b*(r ^ (2 / 3))
+    C <- C / (sqrt(o))
+    x[k, 6] <- pnorm( C)
+  }
+
+  list(x = as.data.frame(x),
+       error = error,
+       param = c(n, p, lambda))
+  return (x)
+}
+```
+
+#### Apeluri pt n = {25, 50, 100} si p = {0.05, 0.1}
+
+```{r}
+
+AppBp(25, 0.05)
+
+
+AppBp(25,0.1)
+
+
+AppBp(50,0.05)
+
+
+AppBp(50,0.1)
+
+
+AppBp(100,0.05)
+
+
+AppBp(100,0.1)
+
+```
+
+### 5) Pentru fiecare n = {25, 50, 100} se ilustreaza erorile maximale absolute
+
+```{r echo=FALSE}
+matr <- matrix(numeric(10 * 9), ncol = 9,
+               dimnames = list(
+                 1:10,
+                 c(
+                   "Binomiala",
+                   "Poisson",
+                   "Normala",
+                   "Normala Corectie",
+                   "Camp-Paulson",
+                   "Binom-Pois",
+                   "Binom-Norm",
+                   "Binom-NormC",
+                   "Binom-Cam"
+                 )
+               ))
+```
+
+#### Se adauga in tabel cate o linie pentru eroarea maximala absoluta dintre repartitia binomiala si cele patru aproximari
+
+```{r}
+
+
+AppBp2 <- function(n, p) {
+x<- matrix(numeric(10 * 9), ncol = 9,
+               dimnames = list(
+                 1:10,
+                 c(
+                   
+                   "Binomiala",
+                   "Poisson",
+                   "Normala",
+                   "Normala Corectie",
+                   "Camp-Paulson",
+                   "Binom-Pois",
+                   "Binom-Norm",
+                   "Binom-NormC",
+                   "Binom-Cam"
+                 )
+               ))
+  x[,1] <- 1:10
+  for(k in 1:10){
+    lambda <- n * p
+    
+    # binomiala
+    x[, 2] <- pbinom(1:10, n, p)
+    
+    # poisson
+    x[, 3] <- ppois(1:10, lambda)
+    error <- max(abs(x[, 1] - x[, 2]))
+    
+    # normala corectie
+    q = 1 - p
+    y <-rnorm(n, n * p, sqrt(n * p * q)) # generare n v.a. normale de medie np
+    z.cc <- ((k + 0.5) - n*p / sqrt(n*p*q))  # cu coeficient de corectie
+    x[k, 5] <- pnorm(z.cc)
+     
+    # normala
+    z.ncc <- (k - n*p / sqrt(n*p*q)) # fara coeficient de corectie
+    x[k, 4] <- pnorm(z.ncc)
+   
+    # paulson
+    a <- (1 / (9 * (n - k)))
+    b <- 1 / (9 * (k + 1))
+    r <- ((k + 1) * (1 - p) / (p * (n - k)))
+    u <- 1 - a
+    C <- (1 - b) * (r ^ (2 / 3))
+    C <- C - u
+    o <- a + b*(r ^ (2 / 3))
+    C <- C / (sqrt(o))
+    x[k, 6] <- pnorm( C)
+  }
+  x[,6] <- max(abs((x[,1]-x[,2])))
+  x[,7] <- max(abs((x[,1]-x[,3])))
+  x[,8] <- max(abs((x[,1]-x[,4])))
+  x[,9] <- max(abs((x[,1]-x[,5])))
+  list(x = as.data.frame(x),
+       error = error,
+       param = c(n, p, lambda))
+  return (x)
+}
+```
+
+# n= 25
+
+```{r}
+
+n<-25
+p<-0.01
+
+y <- matrix(nrow=10, ncol=4)  
+for (i in 1:4) y[,i] <- matr[,i+6-1]
+plot(x=0,y=0.2,main="n = 25",xlab="x" ,lty=2,ylab="y",ylim=c(0,1),xlim=c(0,0.5))
+
+while(p<=0.5)
+{
+  x<-c(p,p,p,p,p,p,p,p,p,p)
+  matr<-AppBp2(n,p)
+  y <- matrix(nrow=10, ncol=4)  
+  for (i in 1:4) y[,i] <- matr[,i+6-1]
+  
+  lines(x=x, y=y[,1], col='green',lwd=2,type="o")
+  lines(x=x, y=y[,2], col='red',lwd=2,type="o")
+  lines(x=x,y=y[,3], col='blue',lwd=2,type="o")
+  lines(x=x, y=y[,4], col='pink',lwd=2,type="o")
+  p<-p+0.01
+
+}
+
+legend("topright", legend=c("Poisson", "Normala","Normala Corectie","Camp Paulson"),
+       col=c("green","red", "blue","pink"), lty=1:3, cex=0.8  ,title="Line types", text.font=4, bg='transparent')
+grid()
+```
+
+# n= 50 
+
+```{r}
+
+n<-50
+p<-0.01
+
+y <- matrix(nrow=10, ncol=4)  
+for (i in 1:4) y[,i] <- matr[,i+6-1]
+plot(x=0,y=0, main="n = 50", xlab="x", ylab="y",ylim=c(0,1),xlim=c(0,0.5))
+while(p<=0.5)
+{
+  x<-c(p,p,p,p,p,p,p,p,p,p)
+  matr<-AppBp2(n,p)
+  y <- matrix(nrow=10, ncol=4)  
+  for (i in 1:4) y[,i] <- matr[,i+6-1]
+  lines(x=x, y=y[,1], col='red',type="l",lwd=10)
+  lines(x=x, y=y[,2], col='green',type="l",lwd=10)
+  
+  lines(x=x,y=y[,3], col='blue',type="l",lwd=10)
+  
+  lines(x=x, y=y[,4], col='pink',type="l",lwd=10)
+  
+  p<-p+0.01
+  
+  
+}
+
+legend("topright", legend=c("Poisson", "Normala","Normala Corectie","Camp Paulson"),
+       col=c("green","red", "blue","pink"), lty=1:3, cex=0.8  ,title="Line types", text.font=4, bg='transparent')
+grid()
+
+```
+
+
+# n= 100
+
+```{r}
+
+n<-100
+p<-0
+
+y <- matrix(nrow=10, ncol=4)  
+for (i in 1:4) y[,i] <- matr[,i+6-1]
+plot(x=0,y=0.2,main="n = 100",xlab="x" ,lty=2,ylab="y",ylim=c(0,1),xlim=c(0,0.5))
+
+while(p<=0.5)
+{
+  x<-c(p,p,p,p,p,p,p,p,p,p)
+  matr<-AppBp2(n,p)
+  y <- matrix(nrow=10, ncol=4)  
+  for (i in 1:4) y[,i] <- matr[,i+6-1]
+  lines(x=x, y=y[,1], col='green',lwd=2,type="o")
+  lines(x=x, y=y[,2], col='red',lwd=2,type="o")
+  lines(x=x,y=y[,3], col='blue',lwd=2,type="o")
+  lines(x=x, y=y[,4], col='pink',lwd=2,type="o")
+  p<-p+0.01
+  
+}
+
+legend("topright", legend=c("Poisson", "Normala","Normala Corectie","Camp Paulson"),
+       col=c("green","red", "blue","pink"), lty=1:3, cex=0.8  ,title="Line types", text.font=4, bg='transparent')
+grid()
+
+```
+
+
+## **2. Problema 2** 
+#### Se vor folosi urmatoarele librarii
+```{r}
+library(pracma)
+library(data.table)
+```
+
+### a) Construirea functiei Gamma
+
+##### *Parametri*
+* **value** = valoarea pentru care se doreste calcularea functiei Gamma
+
+##### *Returneaza*
+* valoarea integralei Gamma, calculata dupa formula specificata in enunt
+
+```{r}
+fgam <- function(value)
+{
+  if (value == 1)
+    return(1)
+  
+  if (value == 1 / 2)
+    return(sqrt(pi))
+  
+  if (value %% 1 == 0 && value > 0)
+    return(factorial(value - 1))
+    
+  if (value > 1)
+    return((value - 1) * fgam(value - 1))
+  
+  else
+    if (value < 1) {
+      integrand <- function(x, A) {
+        x ^ (A - 1) * exp(1) ^ (-x)
+      }
+      
+      integrate_val <-
+        integrate(integrand, lower = 0, upper = 100, A = value)
+      return(integrate_val$value)
+    }
+}
+```
+
+##### **Exemplu:** Aplicarea functiei Gamma pe un numar intreg, respectiv pe unul rational
+
+```{r}
+fgam(7)
+fgam(3.9)
+```
+
+
+
+### b) Construirea functiei Beta
+
+##### *Parametri*
+* **a, b** = doua valori numerice
+
+##### *Returneaza*
+* valoarea integralei Beta, calculata dupa formula specificata in enunt
+
+```{r}
+fbet <- function (a, b)
+{
+  if (a + b == 1 && a > 0 && b > 0)
+    return((pi / sin(a * pi)))
+  
+  return(fgam(a) * fgam(b) / fgam(a + b))
+}
+```
+
+##### **Exemplu:** Aplicarea functiei Beta pe doua numere pozitive a caror suma este egala cu 1, respectiv pe alte doua numere oarecare
+
+```{r}
+fbet(0.35, 0.65)
+fbet(13, 8)
+```
+
+### c) Calculul probabilitatilor
+
+#### Functia de densitate pentru repartitia Gamma
+
+```{r}
+F_Gamma <- function(x, a, b)
+{
+  if (x > 0 && a > 0 && b > 0) {
+    fct <- ((1 * x ^ (a - 1) * exp(1) ^ (-x / b)) / (b ^ a * fgam(a)))
+    return(fct)
+  }
+  else {
+    print("Parametrii trebuie sa fie pozitivi!")
+    return(0)
+  }
+}
+```
+
+#### Functia de densitate pentru repartitia Beta
+
+```{r results='hide', message=FALSE, warning=FALSE}
+F_Beta <- function(x, a, b)
+{
+  if (x > 0 && x < 1 && a > 0 && b > 0) {
+    fct1 <- ((1 * x ^ (a - 1) * (1 - x) ^ (b - 1)) / fbet(a, b))
+    return(fct1)
+  }
+  else
+  {
+    # print("Parametrul x nu este intre 0 si 1")
+    return(0)
+  }
+}
+```
+
+#### Rezolvarea celor 9 subpuncte prin functii separate
+
+##### *Parametri*
+* **val1, val2** = valorile corespunzatoare parametrilor a si b folositi pentru repartitiile Gamma si Beta
+
+##### *Returneaza*
+* rezultatul probabilitatii specificate in enunt, pentru o repartitie cu parametri setati anterior
+
+```{r}
+fprob1 <- function(val1, val2) {
+  
+  # X < 3
+  
+  fprobgamma1 <- function(val1, val2)
+  {
+    return((integrate(
+      F_Gamma,
+      lower = 0,
+      upper = 3,
+      a = val1,
+      b = val2
+    ))$value)
+  }
+  
+  return(fprobgamma1(val1, val2))
+}
+```
+
+```{r}
+fprob1(2, 5)
+fprob1(5, 7)
+fprob1(1, 2)
+```
+
+```{r}
+fprob2 <- function(val1, val2) {
+  
+  # 2 < X < 5
+  
+  fprobgamma2 <- function(val1, val2)
+  {
+    return((integrate(
+      F_Gamma,
+      lower = 2,
+      upper = 5,
+      a = val1,
+      b = val2
+    ))$value)
+  }
+  
+  return(fprobgamma2(val1, val2))
+}
+```
+
+```{r}
+fprob2(2, 5)
+fprob2(5, 7)
+fprob2(1, 2)
+```
+
+```{r}
+fprob3 <- function(val1, val2)
+{
+  fprobgamma3 <- function(val1, val2)
+  {
+    # 3 < X < 5
+    
+    a <- (integrate(
+      F_Gamma,
+      lower = 3,
+      upper = 4,
+      a = val1,
+      b = val2
+    )$value)
+    
+    # X > 2
+    
+    b <- (integrate(
+      F_Gamma,
+      lower = 2,
+      upper = Inf,
+      a = val1,
+      b = val2
+    )$value)
+    return(a / b)
+  }
+  
+  return(fprobgamma3(val1, val2))
+}
+```
+
+```{r}
+fprob3(2, 5)
+fprob3(5, 7)
+fprob3(1, 2)
+```
+
+```{r}
+fprob4 <- function(val1, val2) {
+  
+  # Y > 2
+  
+  fprobbeta4 <- function(val1, val2)
+  {
+    return((integrate(
+      Vectorize(F_Beta),
+      lower = 2,
+      upper = Inf,
+      a = val1,
+      b = val2
+    ))$value)
+  }
+  return(fprobbeta4(val1, val2))
+}
+```
+
+```{r}
+fprob4(2, 5)
+fprob4(5, 7)
+fprob4(1, 2)
+```
+
+```{r}
+
+fprob5 <- function(val1, val2) {
+  
+  # 4 < X < 6
+  
+  fprobgamma5 <- function(val1, val2)
+  {
+    return((integrate(
+      F_Gamma,
+      lower = 4,
+      upper = 6,
+      a = val1,
+      b = val2
+    ))$value)
+  }
+  return(fprobgamma5(val1, val2))
+}
+```
+
+```{r}
+fprob5(2, 5)
+fprob5(5, 7)
+fprob5(1, 2)
+```
+
+```{r}
+fprob6 <- function(val1, val2) {
+  fprobgamma6 <- function(val1, val2)
+  {
+    
+    # 0 < X < 1
+    
+    a <- (integrate(
+      F_Gamma,
+      lower = 0,
+      upper = 1,
+      a = val1,
+      b = val2
+    )$value)
+    
+    # X < 7
+    
+    b <- (integrate(
+      F_Gamma,
+      lower = 0,
+      upper = 7,
+      a = val1,
+      b = val2
+    )$value)
+    return(a / b)
+  }
+  
+  return(fprobgamma6(val1, val2))
+}
+```
+
+```{r}
+fprob6(2, 5)
+fprob6(5, 7)
+fprob6(1, 2)
+```
+
+```{r}
+
+fprob7 <- function(val1, val2) {
+  
+  # X + Y < 5
+  
+  f_suma_gamma_beta <- Vectorize(function(z) {
+    return(integral(function(x) {
+      (((z - x) ^ (val1 - 1) * exp(-(z - x) / val2)) / ((val2 ^ val1) * fgam(val1))) *
+        (((x) ^ (val1 - 1) * (1 - (x)) ^ (val2 - 1)) / fbet(val1, val2))
+    }, 0, 1))
+  })
+  
+  return(integrate(f_suma_gamma_beta, 0, 5)$value)
+  
+}
+```
+
+```{r}
+fprob7(2, 5)
+fprob7(5, 7)
+fprob7(1, 2)
+```
+
+```{r}
+
+fprob8 <- function(val1, val2) {
+  
+  # X - Y > 0.5
+  
+  f_dif_gamma_beta <- Vectorize(function(z) {
+    return(integral(function(x) {
+      (((z + x) ^ (val1 - 1) * exp(-(z + x) / val2)) / ((val2 ^ val1) * fgam(val1))) *
+        (((x) ^ (val1 - 1) * (1 - (x)) ^ (val2 - 1)) / fbet(val1, val2))
+    }, 0, 1))
+  })
+  
+  return(integrate(f_dif_gamma_beta, 0.5, Inf)$value)
+  
+}
+```
+
+```{r}
+fprob8(2, 5)
+fprob8(5, 7)
+fprob8(1, 2)
+```
+
+```{r}
+
+fprob9 <- function(val1, val2)
+{
+  
+  # x + Y > 3
+  
+  f_1 <- Vectorize(function(z) {
+    return(integral(function(x) {
+      (((z - x) ^ (val1 - 1) * exp(-(z - x) / val2)) / ((val2 ^ val1) * fgam(val1))) *
+        (((x) ^ (val1 - 1) * (1 - (x)) ^ (val2 - 1)) / fbet(val1, val2))
+    }, 0, 1))
+  })
+  
+  # X - Y > 0.5
+  
+  f_2 <- Vectorize(function(z) {
+    return(integral(function(x) {
+      (((z + x) ^ (val1 - 1) * exp(-(z + x) / val2)) / ((val2 ^ val1) * fgam(val1))) *
+        (((x) ^ (val1 - 1) * (1 - (x)) ^ (val2 - 1)) / fbet(val1, val2))
+    }, 0, 1))
+    
+  })
+  
+  return((integral(f_2, 0.5, Inf)) * (integral(f_1, 3, Inf)))
+  
+}
+
+```
+
+```{r}
+fprob9(2, 5)
+fprob9(5, 7)
+fprob9(1, 2)
+```
+
+### d) Acelasi enunt ca la punctul anterior, dar folosind functiile de sistem pentru Gama si Beta
+
+```{r}
+F_Gamma_sistem <- function(x, a, b)
+{
+  return(dgamma(x, shape = a, scale = b))
+}
+
+F_Beta_sistem <- function(x, a, b)
+{
+  return(dbeta(x, shape1 = a, shape2 = b))
+}
+```
+
+##### *Parametri*
+* **val1, val2** = valorile corespunzatoare parametrilor a si b folositi pentru repartitiile Gamma si Beta (folosind functii din sistem)
+
+##### *Returneaza*
+* rezultatul probabilitatii specificate in enunt, pentru o repartitie cu parametri setati anterior
+
+```{r}
+fprob1_sistem <- function(val1, val2) {
+  
+  # X < 3
+  
+  fprobgamma1 <- function(val1, val2)
+  {
+    return((
+      integrate(
+        F_Gamma_sistem,
+        lower = 0,
+        upper = 3,
+        a = val1,
+        b = val2
+      )
+    )$value)
+  }
+  
+  return(fprobgamma1(val1, val2))
+}
+```
+
+```{r}
+  fprob1_sistem(2, 5)
+  fprob1_sistem(5, 7)
+  fprob1_sistem(1, 2)
+```
+
+```{r}
+fprob2_sistem <- function(val1, val2) {
+  
+  # 2 < X < 5
+  fprobgamma2 <- function(val1, val2)
+  {
+    return((
+      integrate(
+        F_Gamma_sistem,
+        lower = 2,
+        upper = 5,
+        a = val1,
+        b = val2
+      )
+    )$value)
+  }
+  
+  return(fprobgamma2(val1, val2))
+}
+```
+
+```{r}
+  fprob2_sistem(2, 5)
+  fprob2_sistem(5, 7)
+  fprob2_sistem(1, 2)
+```
+
+```{r}
+
+fprob3_sistem <- function(val1, val2)
+{
+  fprobgamma3 <- function(val1, val2)
+  {
+ 
+   # 3 < X < 5
+    
+    a <- (integrate(
+      F_Gamma_sistem,
+      lower = 3,
+      upper = 4,
+      a = val1,
+      b = val2
+    )$value)
+    
+    # X > 2
+    
+    b <- (integrate(
+      F_Gamma_sistem,
+      lower = 2,
+      upper = Inf,
+      a = val1,
+      b = val2
+    )$value)
+    return(a / b)
+  }
+  
+  return(fprobgamma3(val1, val2))
+}
+```
+
+```{r}
+  fprob3_sistem(2, 5)
+  fprob3_sistem(5, 7)
+  fprob3_sistem(1, 2)
+```
+
+```{r}
+
+fprob4_sistem <- function(val1, val2) {
+  fprobbeta4 <- function(val1, val2)
+  {
+  
+    # Y > 2
+    
+    return(integrate(
+      F_Beta_sistem,
+      lower = 2,
+      upper = Inf,
+      a = val1,
+      b = val2
+    )$value)
+  }
+  
+  return(fprobbeta4(val1, val2))
+}
+```
+
+```{r}
+  fprob4_sistem(2, 5)
+  fprob4_sistem(5, 7)
+  fprob4_sistem(1, 2)
+```
+
+```{r}
+
+fprob5_sistem <- function(val1, val2) {
+  fprobgamma5 <- function(val1, val2)
+  {
+    
+    # 4 < X < 6
+    
+    return((
+      integrate(
+        F_Gamma_sistem,
+        lower = 4,
+        upper = 6,
+        a = val1,
+        b = val2
+      )
+    )$value)
+  }
+  
+  return(fprobgamma5(val1, val2))
+}
+```
+
+```{r}
+  fprob5_sistem(2, 5)
+  fprob5_sistem(5, 7)
+  fprob5_sistem(1, 2)
+```
+
+```{r}
+
+fprob6_sistem <- function(val1, val2) {
+  fprobgamma6 <- function(val1, val2)
+  {
+    
+    # 0 < X < 1
+    
+    a <- (integrate(
+      F_Gamma_sistem,
+      lower = 0,
+      upper = 1,
+      a = val1,
+      b = val2
+    )$value)
+    
+    # X < 7
+    
+    b <- (integrate(
+      F_Gamma_sistem,
+      lower = 0,
+      upper = 7,
+      a = val1,
+      b = val2
+    )$value)
+    return(a / b)
+  }
+  
+  return(fprobgamma6(val1, val2))
+}
+```
+
+```{r}
+  fprob6_sistem(2, 5)
+  fprob6_sistem(5, 7)
+  fprob6_sistem(1, 2)
+```
+
+```{r}
+
+fprob7_sistem <- function(val1, val2) {
+  
+  # X + Y < 5
+  
+  f_suma_gamma_beta <- Vectorize(function(z) {
+    return(integral(function(x) {
+      F_Gamma_sistem((z - x), val1, val2) * F_Beta_sistem(x, val1, val2)
+    }, 0, 1))
+  })
+  
+  return(integrate(f_suma_gamma_beta, 0, 5)$value)
+}
+```
+
+```{r}
+  fprob7_sistem(2, 5)
+  fprob7_sistem(5, 7)
+  fprob7_sistem(1, 2)
+```
+
+```{r}
+
+fprob8_sistem <- function(val1, val2) {
+  
+  # X - Y > 0.5
+  
+  f_dif_gamma_beta <- Vectorize(function(z) {
+    return(integral(function(x) {
+      F_Gamma_sistem((z + x), val1, val2) * F_Beta_sistem(x, val1, val2)
+    }, 0, 1))
+  })
+  
+  return(integrate(f_dif_gamma_beta, 0.5, Inf)$value)
+  
+}
+```
+
+```{r}
+  fprob8_sistem(2, 5)
+  fprob8_sistem(5, 7)
+  fprob8_sistem(1, 2)
+```
+
+```{r}
+
+fprob9_sistem <- function(val1, val2) {
+  
+  # x + Y > 3
+  
+  f_1 <- Vectorize(function(z) {
+    return(integral(function(x) {
+      F_Gamma_sistem((z - x), val1, val2) * F_Beta_sistem(x, val1, val2)
+    }, 0, 1))
+  })
+  
+  # x - Y > 3
+  
+  f_2 <- Vectorize(function(z) {
+    return(integral(function(x) {
+      F_Gamma_sistem((z + x), val1, val2) * F_Beta_sistem(x, val1, val2)
+    }, 0, 1))
+  })
+  
+  return(integral(f_2, 0.5, Inf) * integral(f_1, 3, Inf))
+}
+```
+
+```{r}
+  fprob9_sistem(2, 5)
+  fprob9_sistem(5, 7)
+  fprob9_sistem(1, 2)
+```
+
+##### Pentru a pune datele in tabel, le salvam intai in vectori
+```{r}
+sistem1 <- c(
+  fprob1_sistem(2, 5),
+  fprob2_sistem(2, 5),
+  fprob3_sistem(2, 5),
+  fprob4_sistem(2, 5),
+  fprob5_sistem(2, 5),
+  fprob6_sistem(2, 5),
+  fprob7_sistem(2, 5),
+  fprob8_sistem(2, 5),
+  fprob9_sistem(2, 5)
+  
+)
+
+implem1 <- c(
+  fprob1(2, 5),
+  fprob2(2, 5),
+  fprob3(2, 5),
+  fprob4(2, 5),
+  fprob5(2, 5),
+  fprob6(2, 5),
+  fprob7(2, 5),
+  fprob8(2, 5),
+  fprob9(2, 5)
+)
+
+sistem2 <- c(
+  fprob1_sistem(5, 7),
+  fprob2_sistem(5, 7),
+  fprob3_sistem(5, 7),
+  fprob4_sistem(5, 7),
+  fprob5_sistem(5, 7),
+  fprob6_sistem(5, 7),
+  fprob7_sistem(5, 7),
+  fprob8_sistem(5, 7),
+  fprob9_sistem(5, 7)
+  
+)
+
+implem2 <- c(
+  fprob1(5, 7),
+  fprob2(5, 7),
+  fprob3(5, 7),
+  fprob4(5, 7),
+  fprob5(5, 7),
+  fprob6(5, 7),
+  fprob7(5, 7),
+  fprob8(5, 7),
+  fprob9(5, 7)
+)
+
+sistem3 <- c(
+  fprob1_sistem(1, 2),
+  fprob2_sistem(1, 2),
+  fprob3_sistem(1, 2),
+  fprob4_sistem(1, 2),
+  fprob5_sistem(1, 2),
+  fprob6_sistem(1, 2),
+  fprob7_sistem(1, 2),
+  fprob8_sistem(1, 2),
+  fprob9_sistem(1, 2)
+)
+
+implem3 <- c(
+  fprob1(1, 2),
+  fprob2(1, 2),
+  fprob3(1, 2),
+  fprob4(1, 2),
+  fprob5(1, 2),
+  fprob6(1, 2),
+  fprob7(1, 2),
+  fprob8(1, 2),
+  fprob9(1, 2)
+)
+```
+
+#### Valorile pentru a si b pastrate in tabel
+
+```{r}
+a_vector1 <- c()
+a_vector1[1:9] <- 2
+b_vector1 <- c()
+b_vector1[1:9] <- 9
+a_vector2 <- c()
+a_vector2[1:9] <- 5
+b_vector2 <- c()
+b_vector2[1:9] <- 7
+a_vector3 <- c()
+a_vector3[1:9] <- 1
+b_vector3 <- c()
+b_vector3[1:9] <- 2
+```
+
+#### Crearea efectiva a tabelului
+```{r}
+DT = data.table(
+  a = c(a_vector1, a_vector2, a_vector3),
+  b = c(b_vector1, b_vector2, b_vector3),
+  
+  My_Values = c(implem1, implem2, implem3),
+  System_Values = c(sistem1, sistem2, sistem3)
+)
+DT
+```
+
+
+
+
+
+## **3. Problema 3**
+
+### a) Construirea functiei Gamma
+
+##### *Parametri*
+* **n** = numarul de ... pentru variabila X
+* **m** = numarul de ... pentru variabila Y
+
+##### *Returneaza*
+* o matrice de dimensiuni (n + 2) x (m + 2), reprezentand repartitia comuna pentru X si Y (generate aleator), cu goluri pe diagonala principala
+
+
+```{r}
+frepcomgen <- function(n, m)
+{
+  # se genereaza doua variabile aleatoare discrete x si y 
+  # si repartitiile lor 
+  x <- sample(-2:10, n)
+  x_norm = x / sum(x)
+  y <- sample(-2:10, m)
+  y_norm = y / sum(y)
+  
+  A <- matrix(nrow = n + 2, ncol = m + 2)
+  
+  #pe prima linie se gasesc valorile lui x
+  for (i in 2:(m + 1))
+    A[1, i] <- y[i - 1]
+  #pe prima coloana se gaasesc valorile lui y
+  for (j in 2:(n + 1))
+    A[j, 1] <- x[j - 1]
+  
+  #generam tabelul cu repartitia comuna a v.a. x si y 
+  #intr-o forma in care sa poata sa fie calculate
+  
+  for (i in 2:(n + 1))
+  {
+    suma_l <- 0
+    for (j in 2:(m + 1))
+    {
+      suma_l <- suma_l + x_norm[i - 1] * y_norm[j - 1]
+      if (i != j)
+      {
+        A[i, j] <- x_norm[i - 1] * y_norm[j - 1]
+      }
+      else
+      #lasam goluri pe positiile in care i este egal cu j
+        A[i, j] <- 0
+      
+    }
+    # pe ultima coloana se gasesc probabilitatile valorilor din x
+    A[i, m + 2] <- suma_l
+  }
+  
+  
+  for (j in 2:(m + 1))
+  {
+    suma_c <- 0
+    for (i in 2:(n + 1))
+    {
+      suma_c <- suma_c +  x_norm[i - 1] * y_norm[j - 1]
+    }
+    # pe ultima linie se gasesc probabilitatile valorilor din y
+    A[n + 2, j] <- suma_c
+  }
+  
+  suma <- 0
+  for (i in 2:(n + 1))
+    suma <- suma + A[i, m + 2]
+  A[n + 2, m + 2] <- suma
+  return(A)
+}
+```
+
+
+
+```{r}
+A <- frepcomgen(5, 4)
+A
+```
+
+### b) Umplerea de "goluri" in matrice
+
+##### *Parametri*
+* **A** = o matrice reprezentand repartitia comuna, avand anumite valori lipsa
+
+##### *Returneaza*
+* matricea, avand golurile umplute cu valori corespunzatoare
+
+```{r}
+fcomplrepcom <- function(A) {
+  n <- nrow(A)
+  m <- ncol(A)
+  min <- min(n,m)
+  # se calculeaza suma pe linii si se scade din probabilitatea
+  # totala a liniei
+  for (i in 2:(m - 1))
+  {
+    suma_l <- 0
+    for (j in 2:(min - 1))
+    {
+      if (i != j) {
+        suma_l <- suma_l + A[i, j]
+      }
+    }
+    
+    A[i, i] <-  A[i, ncol(A)] - suma_l
+  }
+  
+  return(A)
+}
+```
+
+```{r}
+A_complet <- fcomplrepcom(A)
+A_complet
+```
+
+
+### c) Efectuarea unor calcule
+
+### Calculul covariantei: Cov(3X, 4Y)
+
+##### *Parametri*
+* **A** = o matrice reprezentand repartitia comuna
+
+##### *Returneaza*
+* covarianta pentru 3X si 4Y, rezultata din matrice
+
+```{r}
+covariance <- function(A) {
+  sum <- 0
+  # calculam E[xy]
+  for (i in 2:(nrow(A) - 1)) {
+    for (j in 2:(ncol(A) - 1)) {
+      sum <- sum + A[i, j] * A[1, j] * A[i, 1]
+    }
+  }
+  # calculam E[y]
+  suma_y <- 0
+  for (j in 2:(ncol(A) - 1)) {
+    suma_y <- suma_y + A[1, j] * A[(nrow(A)), j]
+    
+  }
+  # calculam E[x]
+  suma_x <- 0
+  for (i in 2:(nrow(A) - 1)) {
+    suma_x <- suma_x + A[i, 1] * A[i, (ncol(A))]
+    
+  }
+  # calculam cov(3x,4y)
+  cov <- 12 * (sum - (suma_x * suma_y))
+  
+  return(cov)
+}
+```
+
+```{r}
+c <- covariance(A_complet)
+c
+```
+
+### Calculul probabilitatii P(0 < X < 5|Y > 4)
+
+##### *Parametri*
+* **A** = o matrice reprezentand repartitia comuna
+
+##### *Returneaza*
+* rezultatul probabilitatii P(0 < X < 5|Y > 4), rezultand din matrice
+
+```{r}
+prob1 <- function(A)
+{
+  # calculam P(0 < X < 5 | Y > 4)
+  suma1 <- 0
+  suma2 <- 0
+  for (i in 2:(nrow(A) - 1)) {
+    for (j in 2:(ncol(A) - 1)) {
+      if (A[i, 1] > 0 && A[i, 1] < 5) {
+        suma1 <- suma1 + A[i, j]
+      }
+      if (A[1, j] > 4) {
+        suma2 <- suma2 + A[i, j]
+      }
+    }
+  }
+  return(suma1 / suma2)
+}
+```
+
+```{r}
+pb1 <- prob1(A_complet)
+pb1
+```
+
+### Calculul probabilitatii P(X > 3, Y < 7)
+
+##### *Parametri*
+* **A** = o matrice reprezentand repartitia comuna
+
+##### *Returneaza*
+* rezultatul probabilitatii P(X > 3, Y < 7), rezultand din matrice
+
+```{r}
+prob2 <- function(A)
+{
+  # calculam P(X > 3, Y < 7)
+  suma <- 0
+  for (i in 2:(nrow(A) - 1)) {
+    for (j in 2:(ncol(A) - 1)) {
+      if (A[i, 1] > 3 && A[1, j] < 7) {
+        suma <- suma + A[i, j]
+      }
+    }
+  }
+  return(suma)
+}
+```
+
+```{r}
+pb2 <- prob2(A_complet)
+pb2
+```
+
+### d) Verificarea independentei si a corelatiei
+
+### Verificarea independentei
+
+##### *Parametri*
+* **A** = o matrice reprezentand repartitia comuna
+
+##### *Returneaza*
+* un mesaj specificand daca variabilele X si Y sunt independente sau nu
+
+```{r}
+fverind <- function(A)
+{
+  ok <- 0
+  
+  for (i in 2:(nrow(A) - 1)) {
+    for (j in 2:(ncol(A) - 1)) {
+      if (A[i, j] == A[i, ncol(A)] * A[nrow(A), j])
+        ok <- 1
+      else
+        ok <- 0
+      
+    }
+  }
+  if (ok == 1)
+  {
+    return("sunt independente")
+  }
+  else
+  {
+    return("nu sunt independente")
+  }
+}
+```
+
+```{r}
+fverind(A)
+```
+
+### Verificarea corelatiei
+
+##### *Parametri*
+* **A** = o matrice reprezentand repartitia comuna
+
+##### *Returneaza*
+* un mesaj specificand daca variabilele X si Y sunt corelate sau nu
+
+```{r}
+fvernecor <-  function(A)
+{
+  
+  # calculam E[xy]
+  
+  sum <- 0
+  for (i in 2:(nrow(A) - 1)) {
+    for (j in 2:(ncol(A) - 1)) {
+      sum <- sum + A[i, j] * A[1, j] * A[i, 1]
+    }
+  }
+  
+  # E[x], E[y]
+  
+  suma_y <- 0
+  for (j in 2:(ncol(A) - 1)) {
+    suma_y <- suma_y + A[1, j] * A[(nrow(A)), j]
+    
+    
+  }
+  suma_x <- 0
+  for (i in 2:(nrow(A) - 1)) {
+    suma_x <- suma_x + A[i, 1] * A[i, (ncol(A))]
+  }
+  # folosim formula E[xy]= E[x]E[y]
+  if (sum == suma_x * suma_y)
+  {
+    return("nu sunt corelate")
+  }
+  
+  else
+    return("sunt corelate")
+}
+```
+
+```{r}
+fvernecor(A)
+```
